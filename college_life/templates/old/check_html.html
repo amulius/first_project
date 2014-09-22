@@ -1,0 +1,12 @@
+{% extends 'old/../old/../old/../old/../base_template.html' %}
+
+{% block title %}
+    location list
+{% endblock title %}
+
+
+{% block content %}
+    {% for line in html %}
+    {{ line }}<br>
+    {% endfor %}
+{% endblock content %}

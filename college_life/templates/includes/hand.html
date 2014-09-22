@@ -1,0 +1,9 @@
+{% for card in cards %}
+{#    <p>{{ card.rank }} of {{ card.get_suit_display }}</p>#}
+    {% if card.image_alt.url != None %}
+        <img width="100px" src="{{ card.image_alt.url }}">
+    {% else %}
+        <img width="100px" src="{{ card.image.url }}">
+    {% endif %}
+
+{% endfor %}

@@ -1,0 +1,49 @@
+{% extends 'base_template.html' %}
+
+
+{% block content %}
+    <h4>combat test</h4>
+    <div class="center">
+    <p><b>a wild <span class="mob">{{ user.monster.name }}</span> appeared</b></p>
+    <p >the <span class="mob">{{ user.monster.name }}</span> stands in front of you</p>
+
+    {% if basic_hit != '' %}
+        <p><b>you hit <span class="mob">{{ user.monster.name }}</span> with your weapon for {{ monster_damage }} damage</b></p>
+    {% endif %}
+
+    {% if run != '' %}
+        <p><b>{{ run }}</b></p>
+    {% endif %}
+
+    {% if skill_hit != '' %}
+        <p><b>{{ skill_hit.description }}</b>
+        <br>You hit <span class="mob">{{ user.monster.name }}</span> with a {{ skill_hit.name }} for {{ monster_damage }} damage
+        </p>
+    {% endif %}
+
+    {% if monster_hit != '' %}
+        <p><span class="mob">{{ user.monster.name }}</span> {{ monster_hit }} for {{ player_damage }} damage
+    {% endif %}
+
+
+    <p> What would you like to do?</p>
+    <form method="POST">
+    {% csrf_token %}
+        {{ attack_form }}
+    <input type="submit" value="Basic attack" />
+    </form>
+    <form method="POST">
+    {% csrf_token %}
+        {{ skill_form }}
+    <input type="submit" value="Use skill" />
+    </form>
+    <form method="POST">
+    {% csrf_token %}
+        {{ run_form }}
+    <input type="submit" value="run" />
+    </form>
+    </div>
+
+
+
+{% endblock content %}

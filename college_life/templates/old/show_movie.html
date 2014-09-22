@@ -1,0 +1,14 @@
+{% extends 'old/../old/../old/../old/../base_template.html' %}
+{% load list_filters %}
+{% block title %}
+    show movie
+{% endblock title %}
+
+
+{% block content %}
+    After finding the movie you want please use the movie's ID in the add movie page
+    <br>
+    {% for movie in movies %}
+        <br>Title: {{ movie|longTitle}} ---|--- ID: {{ movie.movieID }}
+    {% endfor %}
+{% endblock content %}

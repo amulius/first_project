@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/test.css' %}">
+        <title>{% block title %}{% endblock title %}</title>
+    </head>
+    <body>
+        <div>
+            {% include 'includes/header_nav.html' %}
+        </div>
+        <h1>My game thing</h1>
+        {% include 'includes/stats.html' %}
+        {% block content %}{% endblock content %}
+    </body>
+{#    <footer>copyright Joshua Stortz 2014</footer>#}
+</html>

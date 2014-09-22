@@ -1,0 +1,18 @@
+{% extends 'base_template.html' %}
+
+
+{% block content %}
+    <h4>map</h4>
+    go to a zone....
+{#    <a href="{% url 'map' %}">return to map</a>#}
+{#    <a href="{% url 'zone' %}">random zone</a>#}
+{#    <a href="{% url 'win' %}">win combat</a>#}
+{#    <a href="{% url 'lose' %}">lose combat</a>    #}
+    <br>
+    <p><a href="{% url 'dorm'  %}">Nap in your dorm</a></p>
+    <p><a href="{% url 'bar'  %}">Go to the bar for more courage</a></p>
+    {% for zone in zones %}
+    <p><a href="{% url 'zone' zone.id %}">{{ zone.name }}</a></p>
+    {% endfor %}
+
+{% endblock content %}

@@ -1,0 +1,18 @@
+{% extends 'base_template.html' %}
+
+
+{% block content %}
+    <h4>dorm</h4>
+    You go with your friends to the local college dive bar,
+    <br>
+    or are dragged by your friends, or go alone or something else...
+    I'm not here to judge you
+    <br>
+    <p>After a night of drinking you feel like you can take on the world...
+        <br>well a after morning where you regret everything.</p>
+    <br>
+    <a href="{% url 'map' %}">return to map</a>
+{#    <a href="{% url 'zone' %}">go to a zone</a>#}
+{#    <a href="{% url 'win' %}">win combat</a>#}
+{#    <a href="{% url 'lose' %}">lose combat</a>    #}
+{% endblock content %}

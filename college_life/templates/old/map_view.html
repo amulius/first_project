@@ -1,0 +1,19 @@
+{% extends 'old/../old/../old/../old/../base_template.html' %}
+{% load leaflet_tags %}
+{% block title %}
+    map
+{% endblock title %}
+
+
+{% block content %}
+    <script type="text/javascript">
+        function main_map_init (map, options) {
+            {% for place in spots %}
+                L.marker({{ place }}).addTo(map);
+            {% endfor %}
+        }
+    </script>
+    <br>
+    {% leaflet_map "yourmap" callback="main_map_init"%}
+{% endblock content %}
+

@@ -1,0 +1,14 @@
+{% extends 'old/../old/../old/../old/../base_template.html' %}
+
+{% block title %}
+    add movie
+{% endblock title %}
+
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ add_movie_form }}
+    <input type="submit" value="add movie by ID" />
+</form>
+{% endblock content %}
