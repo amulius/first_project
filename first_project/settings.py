@@ -84,6 +84,10 @@ USE_TZ = True
 
 # STATIC_URL = '/static/'
 
+FIXTURE_DIRS = (
+    'college_life/fixtures/',
+)
+
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, "static", *MEDIA_URL.strip("/").split("/"))
