@@ -4,17 +4,19 @@
 {% block content %}
 
     <h4>Combat</h4>
+    <img width="100px" src="{{ user.monster.image.url }}">
     <p><b>A wild <span class="mob">{{ user.monster.name }}</span> appeared</b></p>
 
     <p >The <span class="mob">{{ user.monster.name }}</span> stands in front of you</p>
 
     {% if basic_hit != '' %}
-        <p>You hit <span class="mob">{{ user.monster.name }}</span> with your weapon for <span class="player_damage">{{ monster_damage }} damage</span></p>
+        <span class="skill">{{ user.character.major.attack_description }}</span>
+        <p><span class="mob">{{ user.monster.name }}</span> takes <span class="player_damage">{{ monster_damage }} damage</span></p>
     {% endif %}
 
     {% if skill_hit != '' %}
         <p><span class="skill">{{ skill_hit.description }}</span></p>
-        <p>You hit <span class="mob">{{ user.monster.name }}</span> with a {{ skill_hit.name }} for <span class="player_damage">{{ monster_damage }} damage</span>
+        <p><span class="mob">{{ user.monster.name }}</span> takes <span class="player_damage">{{ monster_damage }} damage</span>
         </p>
     {% endif %}
 
@@ -23,7 +25,8 @@
     {% endif %}
 
     {% if monster_hit != '' %}
-        <p><span class="mob">{{ user.monster.name }}</span> {{ monster_hit }} for <span class="monster_damage">{{ player_damage }} damage</span>
+        <span class="skill">{{ user.monster.attack_description }}</span>
+        <p>You take <span class="monster_damage">{{ player_damage }} damage</span>
     {% endif %}
     <br>
     {% if win_text == '' and lose_text == '' %}

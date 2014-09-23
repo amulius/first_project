@@ -38,3 +38,9 @@
     font-weight: bold;
     font-size: 112%;
 }
+
+.little{
+    font-weight: bold;
+    font-size: 75%;
+    /*color: green;*/
+}

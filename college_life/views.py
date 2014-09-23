@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from college_life.forms import BasicAttackForm, SkillUseForm, FleeForm, EmailUserCreationForm, CharacterCreationForm
-from college_life.models import Zone, Mob, Character, Monster
+from college_life.models import Zone, Mob, Character, Monster, Major
 
 
 def level_up(character):
@@ -27,8 +27,8 @@ def monster_update(base_mob, user_mob):
     hp = base_mob.hp
     level = base_mob.zone.level
     user_mob.name = base_mob.name
-    user_mob.hp = base_mob.hp
-    user_mob.level = level * (hp + (level-1)) + (hp * (level-1))
+    user_mob.hp = level * (hp + (level-1)) + (hp * (level-1))
+    user_mob.level = level
     user_mob.xp_drop = base_mob.zone.get_xp()
     user_mob.gp_drop = base_mob.zone.get_gp()
     user_mob.basic_attack = base_mob.basic_attack
@@ -36,6 +36,7 @@ def monster_update(base_mob, user_mob):
     user_mob.str = int(base_mob.str + ((level - 1) * base_mob.str * multiplier))
     user_mob.agl = int(base_mob.agl + ((level - 1) * base_mob.agl * multiplier))
     user_mob.attack_description = base_mob.attack_description
+    user_mob.image = base_mob.image
     user_mob.save()
 
 
@@ -133,30 +134,6 @@ def zone(request, zone_id):
     return redirect("combat_test")
 
 
-# @login_required
-# def combat_win(request):
-#     character = request.user.character
-#
-#     if character.xp >= character.xp_next:
-#         level_up(character)
-#     data = {
-#         'monster': request.user.monster
-#     }
-#     return render(request, 'static/css/win.html', data)
-#
-#
-# @login_required
-# def combat_lose(request):
-#     character = request.user.character
-#     loss = int(character.gp * 0.07)
-#     character.gp -= loss
-#     character.save()
-#     data = {
-#         'loss': loss,
-#     }
-#     return render(request, 'includes/lose.html', data)
-
-
 @login_required
 def combat_run(request):
     character = request.user.character
@@ -191,7 +168,15 @@ def bar(request):
 
 
 def faq(request):
-    return render(request, 'faq.html')
+    data = {
+        'physics': Major.objects.get(pk=1),
+        'compsci': Major.objects.get(pk=2),
+        'sports': Major.objects.get(pk=3),
+        'dance': Major.objects.get(pk=4),
+        'drama': Major.objects.get(pk=5),
+        'art': Major.objects.get(pk=6),
+    }
+    return render(request, 'faq.html', data)
 
 
 def splash(request):
@@ -255,8 +240,8 @@ def combat_action(request):
 
             if action is 'run':
                 flee_odds = 0.5 + 0.1*(character.level - monster.level)
-                if random.random() < flee_odds:
-                    # run = 'run'
+                can_flee = random.random()
+                if can_flee < flee_odds:
                     return redirect("run")
                 else:
                     run = "You are unable to run away..."
