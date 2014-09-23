@@ -5,6 +5,9 @@
 
 
 {% block content %}
-    <h3>splash</h3>
+    <h3>Welcome to College</h3>
+    <p>Feel free to go to <a href="{% url 'faq' %}">Orientation</a> to learn more about the college experience</p>
+    <p>If you are already a student here feel free to <a href="{% url 'login' %}">login</a></p>
+    <p>If you would like to attend here you should <a href="{% url 'register' %}">Register</a> for the next term</p>
 
 {% endblock content %}

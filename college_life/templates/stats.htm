@@ -1,7 +1,8 @@
-{{ user.character.name }}
+<img width="100px" src="{{ user.character.major.image.url }}">
+<br>{{ user.character.name }}
 <br>
 Level {{ user.character.level }} {{ user.character.major.name }} major
-<table style="width:90%">
+<table style="width:100%">
   <tr>
     <td>heath:</td>
     <td>{{ user.character.hp }} / </td>

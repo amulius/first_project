@@ -99,13 +99,11 @@ class Zone(models.Model):
     def get_xp(self):
         xp_base = 250 + ((self.level - 1)*500)
         random_range = 1.0 + ((random.random() - 0.5) * 0.2)
-        print int(random_range * xp_base)
         return int(random_range * xp_base)
 
     def get_gp(self):
         gp_base = self.level**2 * 25
         random_range = 1.0 + ((random.random() - 0.5) * 0.5)
-        print int(random_range * gp_base)
         return int(random_range * gp_base)
 
     def __unicode__(self):

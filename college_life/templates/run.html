@@ -2,10 +2,11 @@
 
 
 {% block content %}
-    <h4>you ran away</h4>
-    something, something other consequences....
-    <a href="{% url 'map' %}">return to map</a>
-{#    <a href="{% url 'zone' %}">go to a zone</a>#}
-{#    <a href="{% url 'win' %}">win combat</a>#}
-{#    <a href="{% url 'lose' %}">lose combat</a>    #}
+<h4>You ran away</h4>
+    <br>
+<p>After getting to a safe distance you realise you dropped {{ drop }} Pocket Change</p>
+crap...
+<br>
+<br>
+<a href="{% url 'map' %}">return to map</a>
 {% endblock content %}

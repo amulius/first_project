@@ -2,47 +2,63 @@
 
 
 {% block content %}
-    <h4>combat test</h4>
-    <div class="center">
-    <p><b>a wild <span class="mob">{{ user.monster.name }}</span> appeared</b></p>
-    <p >the <span class="mob">{{ user.monster.name }}</span> stands in front of you</p>
+
+    <h4>Combat</h4>
+    <p><b>A wild <span class="mob">{{ user.monster.name }}</span> appeared</b></p>
+
+    <p >The <span class="mob">{{ user.monster.name }}</span> stands in front of you</p>
 
     {% if basic_hit != '' %}
-        <p><b>you hit <span class="mob">{{ user.monster.name }}</span> with your weapon for {{ monster_damage }} damage</b></p>
-    {% endif %}
-
-    {% if run != '' %}
-        <p><b>{{ run }}</b></p>
+        <p>You hit <span class="mob">{{ user.monster.name }}</span> with your weapon for <span class="player_damage">{{ monster_damage }} damage</span></p>
     {% endif %}
 
     {% if skill_hit != '' %}
-        <p><b>{{ skill_hit.description }}</b>
-        <br>You hit <span class="mob">{{ user.monster.name }}</span> with a {{ skill_hit.name }} for {{ monster_damage }} damage
+        <p><span class="skill">{{ skill_hit.description }}</span></p>
+        <p>You hit <span class="mob">{{ user.monster.name }}</span> with a {{ skill_hit.name }} for <span class="player_damage">{{ monster_damage }} damage</span>
         </p>
     {% endif %}
 
-    {% if monster_hit != '' %}
-        <p><span class="mob">{{ user.monster.name }}</span> {{ monster_hit }} for {{ player_damage }} damage
+    {% if run != 'run' and run != ''%}
+        <p><span class="run">{{ run }}</span></p>
     {% endif %}
 
-
-    <p> What would you like to do?</p>
+    {% if monster_hit != '' %}
+        <p><span class="mob">{{ user.monster.name }}</span> {{ monster_hit }} for <span class="monster_damage">{{ player_damage }} damage</span>
+    {% endif %}
+    <br>
+    {% if win_text == '' and lose_text == '' %}
+    <p>What would you like to do?</p>
+{#        <br>#}
     <form method="POST">
     {% csrf_token %}
         {{ attack_form }}
     <input type="submit" value="Basic attack" />
     </form>
+        <br>
     <form method="POST">
     {% csrf_token %}
         {{ skill_form }}
     <input type="submit" value="Use skill" />
     </form>
+        <br>
     <form method="POST">
     {% csrf_token %}
         {{ run_form }}
     <input type="submit" value="run" />
     </form>
-    </div>
+    {% endif %}
+
+    {% if win_text != '' %}
+        {% include 'includes/win.html' with monster=user.monster %}
+    {% endif %}
+
+    {% if lose_text != '' %}
+        {% include 'includes/lose.html' with loss=lose_text%}
+    {% endif %}
+
+    {% if run == 'run' %}
+        {% include 'includes/run.html' with loss=lose_text%}
+    {% endif %}
 
 
 

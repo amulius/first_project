@@ -1,19 +1,14 @@
 {% if user.is_authenticated %}
-<a href="{% url 'faq' %}">FAQ</a>
-{# | <a href="{% url 'movie_list' %}">movie list</a>#}
-{# | <a href="{% url 'location_list' %}">location list</a>#}
-{#| <a href="{% url 'search_movie' %}">search movie</a>#}
-{#| <a href="{% url 'add_movie' %}">add movie</a>#}
-{#| <a href="{% url 'add_location' %}">add location</a>#}
+<br>
+<br>
+<br>
+<p><a href="{% url 'faq' %}">Orientation</a></p>
+<p><a href="{% url 'profile' %}">{{ user.username }}</a></p>
+<p><a href="{% url 'map' %}">Campus Map</a></p>
+{% if user.is_staff %}
+<p><a href="{% url 'admin:index' %}">Admin</a>
 {% endif %}
-<span style="float:right;">
-    {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}">{{ user.username }}</a>
-        {% if user.is_staff %}
-              | <a href="{% url 'admin:index' %}">Admin</a>
-        {% endif %}
-         | <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a>
-    {% endif %}
-</span>
+<p><a href="{% url 'logout' %}">Logout</a>
+{#{% else %}#}
+{#<a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a>#}
+{% endif %}

@@ -1,14 +1,40 @@
-body{
-    background-color: #dadada;
-}
+/*body{*/
+    /*background-color: #ffffff;*/
+/*}*/
 
 .center {
-    margin-left: auto;
-    margin-right: auto;
-    width: 70%;
+    text-align: center;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*width: 80%;*/
     /*background-color: #b0e0e6;*/
 }
 
+.center p {
+    text-align: center;
+}
 .mob{
+    font-weight: bold;
+    font-size: 112%;
+    color: #9c0000;
+}
+
+.player_damage{
+    font-size: 150%;
+    color: #00a900;
+}
+
+.monster_damage{
+    font-size: 150%;
     color: red;
+}
+
+.skill{
+    font-weight: bold;
+    font-size: 112%;
+}
+
+.run{
+    font-weight: bold;
+    font-size: 112%;
 }

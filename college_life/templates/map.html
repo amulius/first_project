@@ -1,18 +1,21 @@
 {% extends 'base_template.html' %}
+{% load staticfiles %}
 
 
 {% block content %}
-    <h4>map</h4>
-    go to a zone....
-{#    <a href="{% url 'map' %}">return to map</a>#}
-{#    <a href="{% url 'zone' %}">random zone</a>#}
-{#    <a href="{% url 'win' %}">win combat</a>#}
-{#    <a href="{% url 'lose' %}">lose combat</a>    #}
+    <h3>Campus Map</h3>
+    <div class="col-md-6">
+    <a href="{% url 'dorm' %}"><img width="60px" src="{% static "img/dorm.png" %}">
+        <br>Nap in your dorm</a>
+    </div>
+    <div class="col-md-6">
+    <a href="{% url 'bar'  %}"><img width="60px" src="{% static "img/bar.png" %}">
+        <br>Go to the bar for more courage</a>
+    </div>
     <br>
-    <p><a href="{% url 'dorm'  %}">Nap in your dorm</a></p>
-    <p><a href="{% url 'bar'  %}">Go to the bar for more courage</a></p>
     {% for zone in zones %}
-    <p><a href="{% url 'zone' zone.id %}">{{ zone.name }}</a></p>
+        <div class="col-md-4">
+    <a href="{% url 'zone' zone.id %}"><img width="60px" src="{{ zone.image.url }}"><br>{{ zone.name }}</a>
+        </div>
     {% endfor %}
-
 {% endblock content %}

@@ -23,15 +23,18 @@ def level_up(character):
 
 
 def monster_update(base_mob, user_mob):
+    multiplier = 1.1
+    hp = base_mob.hp
+    level = base_mob.zone.level
     user_mob.name = base_mob.name
     user_mob.hp = base_mob.hp
-    user_mob.level = base_mob.zone.level
+    user_mob.level = level * (hp + (level-1)) + (hp * (level-1))
     user_mob.xp_drop = base_mob.zone.get_xp()
     user_mob.gp_drop = base_mob.zone.get_gp()
     user_mob.basic_attack = base_mob.basic_attack
-    user_mob.int = base_mob.int
-    user_mob.str = base_mob.str
-    user_mob.agl = base_mob.agl
+    user_mob.int = int(base_mob.int + ((level - 1) * base_mob.int * multiplier))
+    user_mob.str = int(base_mob.str + ((level - 1) * base_mob.str * multiplier))
+    user_mob.agl = int(base_mob.agl + ((level - 1) * base_mob.agl * multiplier))
     user_mob.attack_description = base_mob.attack_description
     user_mob.save()
 
@@ -57,6 +60,8 @@ def fight(character, monster, attack_type, multiplier):
     attack = stats[attack_type][0] + (multiplier * character.level)
     defence = stats[attack_type][1]
     damage = int(attack - defence + 1)
+    if damage < 0:
+        damage = 0
 
     monster.hp -= damage
     if monster.hp < 0:
@@ -113,6 +118,7 @@ def profile(request):
 def map(request):
     character = request.user.character
     zones = Zone.objects.filter(level__lte=character.level)
+    # zones = Zone.objects.all()
     data = {
         'zones': zones,
     }
@@ -127,33 +133,40 @@ def zone(request, zone_id):
     return redirect("combat_test")
 
 
-@login_required
-def combat_win(request):
-    character = request.user.character
-
-    if character.xp >= character.xp_next:
-        level_up(character)
-    data = {
-        'monster': request.user.monster
-    }
-    return render(request, 'win.html', data)
-
-
-@login_required
-def combat_lose(request):
-    character = request.user.character
-    loss = int(character.gp * 0.07)
-    character.gp -= loss
-    character.save()
-    data = {
-        'loss': loss,
-    }
-    return render(request, 'lose.html', data)
+# @login_required
+# def combat_win(request):
+#     character = request.user.character
+#
+#     if character.xp >= character.xp_next:
+#         level_up(character)
+#     data = {
+#         'monster': request.user.monster
+#     }
+#     return render(request, 'static/css/win.html', data)
+#
+#
+# @login_required
+# def combat_lose(request):
+#     character = request.user.character
+#     loss = int(character.gp * 0.07)
+#     character.gp -= loss
+#     character.save()
+#     data = {
+#         'loss': loss,
+#     }
+#     return render(request, 'includes/lose.html', data)
 
 
 @login_required
 def combat_run(request):
-    return render(request, 'run.html')
+    character = request.user.character
+    drop = int(character.gp * 0.10)
+    character.gp -= drop
+    character.save()
+    data = {
+        'drop': drop,
+    }
+    return render(request, 'run.html', data)
 
 
 @login_required
@@ -185,22 +198,19 @@ def splash(request):
     return render(request, 'splash.html')
 
 
+def test(request):
+    return render(request, 'test.html')
+
+
 def combat_action(request):
     character = request.user.character
     monster = request.user.monster
-    # result = check_results(character, monster)
-    # if result is 'win':
-    #     return redirect("win")
-    # elif result is 'lose':
-    #     return redirect("lose")
-    # major = request.user.character.major
     basic_hit = ''
     skill_hit = ''
     run = ''
     monster_hit = ''
     win_text = ''
     lose_text = ''
-
     monster_damage = 0
     player_damage = 0
     data = {'basic_hit': basic_hit,
@@ -212,15 +222,14 @@ def combat_action(request):
             'player_damage': player_damage,
             'monster_hit': monster_hit,
             'attack_form': BasicAttackForm(prefix='basic'),
-            # 'skill_form': SkillUseForm(major=major.id, mp=character.mp, prefix='skill'),
             'skill_form': SkillUseForm(character=character, prefix='skill'),
             'run_form': FleeForm(prefix='flee'),
             }
     if request.method == "POST":
         basic_attack = BasicAttackForm(request.POST, prefix='basic')
-        # skill_attack = SkillUseForm(request.POST, major=major.id, mp=character.mp, prefix='skill')
         skill_attack = SkillUseForm(request.POST, character=character, prefix='skill')
         flee = FleeForm(request.POST, prefix='flee')
+
         if basic_attack.is_valid() and skill_attack.is_valid() and flee.is_valid():
             does_hit = basic_attack.cleaned_data['attack']
             does_skill = skill_attack.cleaned_data['skills']
@@ -247,6 +256,7 @@ def combat_action(request):
             if action is 'run':
                 flee_odds = 0.5 + 0.1*(character.level - monster.level)
                 if random.random() < flee_odds:
+                    # run = 'run'
                     return redirect("run")
                 else:
                     run = "You are unable to run away..."
@@ -255,6 +265,17 @@ def combat_action(request):
                 attack_type = monster.basic_attack
                 player_damage = fight(monster, character, attack_type, 0)
                 monster_hit = 'attacks'
+
+            result = check_results(character, monster)
+            if result is 'win':
+                win_text = 'win'
+                if character.xp >= character.xp_next:
+                    level_up(character)
+            elif result is 'lose':
+                loss = int(character.gp * 0.07)
+                character.gp -= loss
+                lose_text = loss
+                character.save()
 
             data = {'basic_hit': basic_hit,
                     'skill_hit': skill_hit,
@@ -265,16 +286,10 @@ def combat_action(request):
                     'player_damage': player_damage,
                     'monster_hit': monster_hit,
                     'attack_form': BasicAttackForm(prefix='basic'),
-                    # 'skill_form': SkillUseForm(major=major.id, mp=character.mp, prefix='skill'),
                     'skill_form': SkillUseForm(character=character, prefix='skill'),
                     'run_form': FleeForm(prefix='flee'),
                     }
 
-            result = check_results(character, monster)
-            if result is 'win':
-                return redirect("win")
-            elif result is 'lose':
-                return redirect("lose")
             return render(request, "combat_test.html", data)
         else:
             data = {'basic_hit': '',
